@@ -1,9 +1,9 @@
-import { NextResponse } from 'next/server';
-import * as puppeteer from 'puppeteer';
-
 import chromium from '@sparticuz/chromium';
+import { NextResponse } from 'next/server';
+import type { Browser as PBrowser } from 'puppeteer';
+import puppeteer from 'puppeteer';
+import type { Browser as PCBrowser } from 'puppeteer-core';
 import puppeteerCore from 'puppeteer-core';
-import type { Browser } from 'puppeteer-core';
 
 export const maxDuration = 60; // This function can run for a maximum of 60 seconds
 
@@ -30,7 +30,9 @@ export async function POST(req: Request) {
  * @returns PDF file as a response
  */
 async function generatePDF(html: string) {
-  let browser: puppeteer.Browser | Browser;
+  let browser: PCBrowser | PBrowser;
+
+  console.log('NODE_ENV', process.env.NODE_ENV);
 
   if (process.env.NODE_ENV === 'production') {
     browser = await puppeteerCore.launch({
